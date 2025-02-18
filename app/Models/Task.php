@@ -10,7 +10,8 @@ class Task extends Model
         'user_id',
         'title',
         'description',
-        'estimated_cycle',
+        'estimated_cycles',
+        'completed_cycle',
         'status'
     ];
 }

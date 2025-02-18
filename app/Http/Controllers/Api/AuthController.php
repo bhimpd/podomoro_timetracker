@@ -55,4 +55,23 @@ class AuthController extends Controller
             'token' => $token
         ], 200);
     }
+
+
+    public function logout(Request $request)
+    {
+        $user = User::where('id',$request->user()->id)->first();
+
+        if($user){
+            $user->tokens()->delete();
+
+            return response()->json([
+                'message' => 'Logout successful',
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'message' => 'User Not Found...',
+            ], 404);
+        }
+    }
 }

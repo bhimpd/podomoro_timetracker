@@ -58,7 +58,7 @@ class AuthController extends Controller
 
 
     public function logout(Request $request)
-    {
+    {    
         $user = User::where('id',$request->user()->id)->first();
 
         if($user){

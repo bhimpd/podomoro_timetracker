@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class LoginRequest extends FormRequest
+class TaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,16 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required',
-            'password' => 'required',
+            'title' => 'required|min:3',
+            'description' => 'required|min:10',
+            'estimated_cycles' => 'nullable|integer|min:1', // Estimated cycles is not required, but if provided, it should be an integer and at least 1
+            'completed_cycle' => 'nullable|integer|min:0', // Completed cycles is not required, but if provided, it should be an integer and at least 0
+            'status' => 'nullable|in:pending,in_progress,completed', // Status is not required, but if provided, it should be one of the valid values
         ];
     }
 
     public function failedValidation(Validator $validator)
-        {
+    {
         throw new HttpResponseException(response()->json([
             'success'   => false,
             'message'   => 'Validation errors',

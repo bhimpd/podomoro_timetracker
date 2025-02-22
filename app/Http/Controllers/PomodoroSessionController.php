@@ -104,4 +104,32 @@ class PomodoroSessionController extends Controller
         ]);
     }
 
+    public function skip($id)
+    {
+       // Find the session
+       $session = PomodoroSession::find($id);
+
+       if (!$session) {
+           return response()->json([
+               'success' => false,
+               'message' => 'Session not found.',
+           ], 404);
+       }
+       
+        // Check if session is already completed or skipped
+        if (in_array($session->status, ['completed', 'skipped'])) {
+            return response()->json(['message' => 'Session already completed or skipped'], 400);
+        }
+    
+        // Skip the session
+        $session->status = 'skipped';
+        $session->end_time = Carbon::now(); // Mark the skip time
+        $session->save();
+    
+        return response()->json([
+            'message' => 'Pomodoro session skipped',
+            'session_id' => $session->id
+        ]);
+    }
+
 }

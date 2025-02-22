@@ -179,4 +179,23 @@ class PomodoroSessionController extends Controller
         ]);
     }
 
+    public function completed()
+    {
+        // Fetch completed sessions for the authenticated user
+        $sessions = PomodoroSession::where('user_id', auth()->user()->id)
+            ->where('status', 'completed')
+            ->get();
+
+        if (!$sessions) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session not found that user id.',
+            ], 404);
+        }
+
+        return response()->json([
+            'sessions' => $sessions
+        ]);
+    }
+
 }

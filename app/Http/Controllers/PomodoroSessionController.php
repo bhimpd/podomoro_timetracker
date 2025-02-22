@@ -37,4 +37,29 @@ class PomodoroSessionController extends Controller
         ],200);
     }
 
+    public function pause($id)
+    {
+        // Find the session
+        $session = PomodoroSession::find($id);
+
+        if (!$session) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session not found.',
+            ], 404);
+        }
+        if ($session->status !== 'running') {
+            return response()->json(['message' => 'Session is not running'], 400);
+        }
+
+        $session->status = 'paused';
+        $session->end_time = Carbon::now();
+        $session->save();
+
+        return response()->json([
+            'message' => 'Pomodoro session paused',
+            'session_id' => $session->id
+        ]);
+    }
+
 }

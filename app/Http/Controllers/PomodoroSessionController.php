@@ -115,7 +115,7 @@ class PomodoroSessionController extends Controller
                'message' => 'Session not found.',
            ], 404);
        }
-       
+
         // Check if session is already completed or skipped
         if (in_array($session->status, ['completed', 'skipped'])) {
             return response()->json(['message' => 'Session already completed or skipped'], 400);
@@ -132,4 +132,21 @@ class PomodoroSessionController extends Controller
         ]);
     }
 
+
+    public function show($id)
+    {
+        // Find the session
+       $session = PomodoroSession::find($id);
+
+       if (!$session) {
+           return response()->json([
+               'success' => false,
+               'message' => 'Session not found.',
+           ], 404);
+       }
+
+        return response()->json([
+            'session' => $session
+        ]);
+    }
 }

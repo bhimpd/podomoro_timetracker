@@ -27,9 +27,9 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'required|min:3',
             'description' => 'required|min:10',
-            'estimated_cycles' => 'nullable|integer|min:1', // Estimated cycles is not required, but if provided, it should be an integer and at least 1
-            'completed_cycle' => 'nullable|integer|min:0', // Completed cycles is not required, but if provided, it should be an integer and at least 0
-            'status' => 'nullable|in:pending,in_progress,completed', // Status is not required, but if provided, it should be one of the valid values
+            'estimated_cycles' => 'nullable|integer|min:1', 
+            'completed_cycle' => 'nullable|integer|min:0', 
+            'status' => 'nullable|in:pending,in_progress,completed',
         ];
     }
 

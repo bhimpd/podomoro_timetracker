@@ -161,4 +161,22 @@ class PomodoroSessionController extends Controller
             'sessions' => $sessions
         ]);
     }
+
+    public function taskSessions($task_id)
+    {
+        // Fetch all sessions for a specific task
+        $sessions = PomodoroSession::where('task_id', $task_id)->get();
+
+        if (!$sessions) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session not found that task id.',
+            ], 404);
+        }
+
+        return response()->json([
+            'sessions' => $sessions
+        ]);
+    }
+
 }

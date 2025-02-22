@@ -30,6 +30,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::get('/pomodoro-session/{id}', [PomodoroSessionController::class, 'show']);
     Route::get('/pomodoro-sessions/active', [PomodoroSessionController::class, 'active']);
+    Route::get('/pomodoro-session/task/{task_id}', [PomodoroSessionController::class, 'taskSessions']);
+
 
 
 

@@ -48,7 +48,6 @@ class TaskController extends Controller
         ], 200);
     }
 
-    // Fetch a single task by ID
     public function show($id)
     {
         $task = Task::where('user_id', Auth::id())->find($id);
@@ -66,5 +65,24 @@ class TaskController extends Controller
             'task' => $task
         ], 200);
     }
+
+     public function destroy($id)
+     {
+         $task = Task::where('user_id', Auth::id())->find($id);
+ 
+         if (!$task) {
+             return response()->json([
+                 'success' => false,
+                 'message' => 'Task not found.',
+             ], 404);
+         }
+ 
+         $task->delete();
+ 
+         return response()->json([
+             'success' => true,
+             'message' => 'Task deleted successfully',
+         ], 200);
+     }
 
 }

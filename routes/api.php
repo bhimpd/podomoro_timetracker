@@ -25,6 +25,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::post('/pomodoro-session/start/{task_id}', [PomodoroSessionController::class, 'start']);
     Route::post('/pomodoro-session/pause/{id}', [PomodoroSessionController::class, 'pause']);
+    Route::post('/pomodoro-session/end/{id}', [PomodoroSessionController::class, 'end']);
+
 
 
 

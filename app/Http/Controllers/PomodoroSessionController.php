@@ -48,6 +48,7 @@ class PomodoroSessionController extends Controller
                 'message' => 'Session not found.',
             ], 404);
         }
+
         if ($session->status !== 'running') {
             return response()->json(['message' => 'Session is not running'], 400);
         }
@@ -59,6 +60,47 @@ class PomodoroSessionController extends Controller
         return response()->json([
             'message' => 'Pomodoro session paused',
             'session_id' => $session->id
+        ]);
+    }
+
+    public function end($id)
+    {
+        // Find the session
+        $session = PomodoroSession::find($id);
+
+        if (!$session) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session not found.',
+            ], 404);
+        }
+
+         // Check if session is already completed
+        if ($session->status === 'completed') {
+            return response()->json(['message' => 'Session already completed'], 400);
+        }
+
+        // End the session
+        $session->status = 'completed';
+        $session->end_time = Carbon::now(); // Mark the end time
+        $session->save();
+
+        // Retrieve the task related to the session
+        $task = $session->task;
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found for this session'], 404);
+        }
+
+        // Update the task completed_cycles
+        $task->completed_cycle += 1;
+        $task->save();
+
+        return response()->json([
+            'message' => 'Pomodoro session completed',
+            'session_id' => $session->id,
+            'task_id' => $task->id,
+            'completed_cycles' => $task->completed_cycle
         ]);
     }
 

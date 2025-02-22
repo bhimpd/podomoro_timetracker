@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('/pomodoro-session/skip/{id}', [PomodoroSessionController::class, 'skip']);
 
     Route::get('/pomodoro-session/{id}', [PomodoroSessionController::class, 'show']);
+    Route::get('/pomodoro-sessions/active', [PomodoroSessionController::class, 'active']);
 
 
 

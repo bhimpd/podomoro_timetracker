@@ -149,4 +149,16 @@ class PomodoroSessionController extends Controller
             'session' => $session
         ]);
     }
+
+    public function active()
+    {
+        // Fetch active sessions for the authenticated user
+        $sessions = PomodoroSession::where('user_id', auth()->user()->id)
+            ->whereIn('status', ['running', 'paused'])
+            ->get();
+
+        return response()->json([
+            'sessions' => $sessions
+        ]);
+    }
 }

@@ -27,7 +27,7 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'required|min:3',
             'description' => 'required|min:10',
-            'estimated_cycles' => 'nullable|integer|min:1', 
+            'estimated_cycles' => 'nullable|integer|min:0', 
             'completed_cycle' => 'nullable|integer|min:0', 
             'status' => 'nullable|in:pending,in_progress,completed',
         ];

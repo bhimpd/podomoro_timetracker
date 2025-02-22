@@ -66,23 +66,49 @@ class TaskController extends Controller
         ], 200);
     }
 
-     public function destroy($id)
-     {
-         $task = Task::where('user_id', Auth::id())->find($id);
+    public function destroy($id)
+    {
+        $task = Task::where('user_id', Auth::id())->find($id);
  
-         if (!$task) {
-             return response()->json([
-                 'success' => false,
-                 'message' => 'Task not found.',
-             ], 404);
-         }
+        if (!$task) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Task not found.',
+            ], 404);
+        }
  
-         $task->delete();
- 
-         return response()->json([
-             'success' => true,
-             'message' => 'Task deleted successfully',
-         ], 200);
+        $task->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task deleted successfully',
+        ], 200);
      }
+
+    public function update(TaskRequest $request, $id)
+    {
+        $task = Task::where('user_id', Auth::id())->find($id);
+
+        if (!$task) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Task not found.',
+            ], 404);
+        }
+
+        $task->update([
+            'title' => $request->title ?? $task->title,
+            'description' => $request->description ?? $task->description,
+            'estimated_cycles' => $request->estimated_cycles ?? $task->estimated_cycles,
+            'completed_cycle' => $request->completed_cycle ?? $task->completed_cycle,
+            'status' => $request->status ?? $task->status,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task updated successfully',
+            'task' => $task
+        ], 200);
+    }
 
 }

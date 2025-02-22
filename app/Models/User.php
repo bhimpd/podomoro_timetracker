@@ -46,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pomodoroSessions()
+    {
+        return $this->hasMany(PomodoroSession::class);
+    }
+
 }

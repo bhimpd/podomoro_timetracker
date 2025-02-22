@@ -47,4 +47,24 @@ class TaskController extends Controller
             'tasks' => $tasks
         ], 200);
     }
+
+    // Fetch a single task by ID
+    public function show($id)
+    {
+        $task = Task::where('user_id', Auth::id())->find($id);
+
+        if (!$task) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Task not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task fetched successfully',
+            'task' => $task
+        ], 200);
+    }
+
 }

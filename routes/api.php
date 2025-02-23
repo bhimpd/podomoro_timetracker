@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/pomodoro-sessions/completed', [PomodoroSessionController::class, 'completed']);
 
     Route::post('/break/start/{pomodoro_session_id}', [BreakSessionController::class, 'start']);
+    Route::post('/break/end/{id}', [BreakSessionController::class, 'end']);
 
 
 

@@ -31,4 +31,19 @@ class BreakSessionController extends Controller
 
         return response()->json(['message' => 'Break started', 'break' => $breakSession]);
     }
+
+    public function end($id)
+    {
+        $breakSession = BreakSession::find($id);
+
+        if(!$breakSession){
+            return response()->json([
+                'message' => 'Break Session  not found..'
+            ],404);
+        }
+        $breakSession->end_time = Carbon::now();
+        $breakSession->save();
+
+        return response()->json(['message' => 'Break ended', 'break' => $breakSession]);
+    }
 }

@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api"; // Replace with your Laravel backend URL
+const API_URL = "http://localhost:8000/api"; // Replace with your backend URL
 
-// Register a new user
-const register = async (name, email, password) => {
+const register = async (name, email, password, password_confirmation) => {
   try {
     const response = await axios.post(`${API_URL}/register`, {
       name,
       email,
       password,
+      password_confirmation,
     });
     return response.data;
   } catch (error) {
@@ -16,7 +16,6 @@ const register = async (name, email, password) => {
   }
 };
 
-// Login user
 const login = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
@@ -29,7 +28,6 @@ const login = async (email, password) => {
   }
 };
 
-// Logout user
 const logout = async () => {
   try {
     const response = await axios.post(`${API_URL}/logout`, null, {

@@ -27,7 +27,7 @@ const Auth = () => {
 
       window.location.reload();
     } catch (error) {
-      setError(error.message || "An error occurred. Please try again.");
+      setError(error.message || "An error occurred.. Please try again.");
     }
   };
 

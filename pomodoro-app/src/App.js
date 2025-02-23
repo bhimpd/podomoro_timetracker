@@ -1,9 +1,9 @@
 import React from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-// import Navbar from "./components/Navbar/Navbar";
-// import Timer from "./components/Timer/Timer";
-// import TaskList from "./components/TaskList/TaskList";
-// import Stats from "./components/Stats/Stats";
+import Navbar from "./components/Navbar/Navbar";
+import Timer from "./components/Timer/Timer";
+import TaskList from "./components/TaskList/TaskList";
+import Stats from "./components/Stats/Stats";
 import Auth from "./components/Auth/Auth";
 
 const AppContent = () => {
@@ -11,13 +11,13 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="container mx-auto p-4 space-y-8">
         {isAuthenticated ? (
           <>
-            {/* <Timer />
+            <Timer />
             <TaskList />
-            <Stats /> */}
+            <Stats />
             <button
               onClick={logout}
               className="bg-red-500 text-white px-4 py-2 rounded-lg"

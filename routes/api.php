@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\BreakSessionController;
 use App\Http\Controllers\PomodoroSessionController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/pomodoro-session/task/{task_id}', [PomodoroSessionController::class, 'taskSessions']);
     Route::get('/pomodoro-sessions/completed', [PomodoroSessionController::class, 'completed']);
 
+    Route::post('/break/start/{pomodoro_session_id}', [BreakSessionController::class, 'start']);
 
 
 

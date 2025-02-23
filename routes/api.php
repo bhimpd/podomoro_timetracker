@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('/break/end/{id}', [BreakSessionController::class, 'end']);
 
 
-    Route::get('stats', [StatsController::class, 'index']);
+    Route::get('/stats', [StatsController::class, 'index']);
 
 
 });

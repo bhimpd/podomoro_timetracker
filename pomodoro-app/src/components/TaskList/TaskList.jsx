@@ -1,29 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import taskService from "../../services/taskService";
+import TaskForm from "../TaskForm/TaskForm";
+
 
 const TaskList = () => {
-  const [tasks, setTasks] = useState([
-    { id: 1, name: "Task 1", completed: false },
-    { id: 2, name: "Task 2", completed: false },
-    { id: 3, name: "Task 3", completed: false },
-  ]);
-  const [newTask, setNewTask] = useState("");
+  const [tasks, setTasks] = useState([]); // Initialize tasks as an empty array
+  const [loading, setLoading] = useState(true); // Add a loading state
+  const [error, setError] = useState(null); // Add an error state
+  const [taskToEdit, setTaskToEdit] = useState(null); // State for the task being edited
 
-  const addTask = () => {
-    if (newTask) {
-      setTasks([...tasks, { id: tasks.length + 1, name: newTask, completed: false }]);
-      setNewTask("");
+  // Fetch tasks on component mount
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await taskService.getTasks();
+      console.log("Full API Response:", response); // Debugging
+    console.log("Extracted Tasks:", response.data); // Debugging
+
+
+      // Ensure the response is an array
+      if (Array.isArray(response.data)) {
+        setTasks(response.data);
+      } else {
+        setError("Invalid data format received from the API");
+      }
+    } catch (error) {
+      setError("Error fetching tasks. Please try again later.");
+      console.error("Error fetching tasks:", error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
-  const toggleTaskCompletion = (id) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+
+
+  const deleteTask = async (id) => {
+    try {
+      await taskService.deleteTask(id);
+      fetchTasks(); // Refresh the task list
+    } catch (error) {
+      setError("Error deleting task. Please try again.");
+      console.error("Error deleting task:", error);
+    }
   };
+
+  if (loading) {
+    return <div>Loading tasks...</div>; // Show a loading message
+  }
+
+  if (error) {
+    return <div className="text-danger">{error}</div>; // Show an error message
+  }
 
   return (
     <div className="bg-white p-4 rounded shadow-lg">
       <h2 className="h4 font-weight-bold">Task List</h2>
+      <TaskForm taskToEdit={taskToEdit} setTaskToEdit={setTaskToEdit} fetchTasks={fetchTasks} />
+
       <ul className="list-unstyled mt-3">
         {tasks.map((task) => (
           <li
@@ -31,32 +67,19 @@ const TaskList = () => {
             className={`p-3 mb-2 border rounded ${task.completed ? "bg-success text-white" : "bg-light"}`}
           >
             <div className="d-flex justify-content-between align-items-center">
-              <span>{task.name}</span>
-              <button
-                onClick={() => toggleTaskCompletion(task.id)}
-                className={`btn btn-sm ${task.completed ? "btn-secondary" : "btn-primary"}`}
-              >
-                {task.completed ? "Completed" : "Complete"}
-              </button>
+              <span>{task.title}</span>
+              <div>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="btn btn-danger btn-sm ml-2"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </li>
         ))}
       </ul>
-      <div className="d-flex gap-2 mt-3">
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          className="form-control"
-          placeholder="New task"
-        />
-        <button
-          onClick={addTask}
-          className="btn btn-primary"
-        >
-          Add Task
-        </button>
-      </div>
     </div>
   );
 };

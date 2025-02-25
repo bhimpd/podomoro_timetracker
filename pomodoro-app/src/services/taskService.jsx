@@ -17,11 +17,18 @@ const getTasks = async () => {
 };
 
 // Add a new task
-const addTask = async (name) => {
+const addTask = async (task) => {
   try {
     const response = await axios.post(
       `${API_URL}/tasks`,
-      { name },
+      {
+        title: task.title,
+        description: task.description,
+        estimated_cycles: task.estimated_cycles || 1,
+        completed_cycle: task.completed_cycle || 0,
+        status: task.status || "pending",
+      },
+      
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,12 +41,13 @@ const addTask = async (name) => {
   }
 };
 
+
 // Update a task
-const updateTask = async (id, completed) => {
+const updateTask = async (id, updatedTask) => {
   try {
     const response = await axios.put(
-      `${API_URL}/task/${id}`,
-      { completed },
+      `${API_URL}/tasks/${id}`, // Correct endpoint
+      updatedTask,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

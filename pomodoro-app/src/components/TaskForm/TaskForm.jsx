@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import taskService from "../../services/taskService";
 
 const TaskForm = ({ taskToEdit, setTaskToEdit, fetchTasks }) => {
-  const [task, setTask] = useState({ title: "", description: "", status: "pending" });
+  const [task, setTask] = useState({
+    title: "",
+    description: "",
+    estimated_cycles: 1, // Default value
+    completed_cycle: 0, // Default value
+    status: "pending",
+  });
+  
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -17,27 +24,27 @@ const TaskForm = ({ taskToEdit, setTaskToEdit, fetchTasks }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (taskToEdit) {
-      // Update existing task
-      try {
-        await taskService.updateTask(taskToEdit.id, task);
-        fetchTasks();
-        setTaskToEdit(null);
-      } catch (error) {
-        setError("Error updating task. Please try again.");
-      }
-    } else {
-      // Add new task
-      try {
-        await taskService.addTask(task);
-        fetchTasks();
-        setTask({ title: "", description: "", status: "pending" }); // Reset form after success
-      } catch (error) {
-        setError("Error adding task. Please try again.");
+  
+    try {
+      await taskService.addTask(task);
+      fetchTasks();
+      setTask({
+        title: "",
+        description: "",
+        estimated_cycles: 1,
+        completed_cycle: 0,
+        status: "pending",
+      });
+      setError(null);
+    } catch (error) {
+      if (error.data) {
+        setError(error.data);
+      } else {
+        setError("An unexpected error occurred.");
       }
     }
   };
+
 
   return (
     <div className="bg-white p-4 rounded shadow-lg">
@@ -77,6 +84,30 @@ const TaskForm = ({ taskToEdit, setTaskToEdit, fetchTasks }) => {
             <option value="completed">Completed</option>
           </select>
         </div>
+
+        <div className="form-group">
+          <label>Estimated Cycles</label>
+          <input
+            type="number"
+            value={task.estimated_cycles}
+            onChange={(e) => setTask({ ...task, estimated_cycles: parseInt(e.target.value) })}
+            className="form-control"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Completed Cycle</label>
+          <input
+            type="number"
+            value={task.completed_cycle}
+            onChange={(e) => setTask({ ...task, completed_cycle: parseInt(e.target.value) })}
+            className="form-control"
+            required
+          />
+        </div>
+
+
         <button type="submit" className="btn btn-primary">
           {taskToEdit ? "Update Task" : "Add Task"}
         </button>
